@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/jsvalue.css">
+</head>
+<style>
+    table,
+    th,
+    td,
+    tbody {
+        border: 1px solid black;
+        border-collapse: collapse;
+
+    }
+
+    th,
+    td {
+        padding: 10px;
+
+    }
+</style>
+
+<body>
+    <div class="registration-form">
+        <h1>Registration Form</h1>
+        <form id="form">
+
+        </form>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sr.No.</th>
+                    <th>Name</th>
+                    <th>Mobile No.</th>
+                    <th>password</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+
+                </tr>
+            </thead>
+            <tbody id="demo">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        //JS start
+        let users = []
+
+        let newForm = `<input type="text" name="Name" id="name" placeholder="Your Name"><br><br>
+            <input type="number" name="Mobile Number" id="number" placeholder="Mobile No."><br><br>
+            <input type="password" name="Password" id="password" placeholder="password"><br><br>
+            <input onclick="addUser()" type="button" value="submit"><br><br>`
+        document.getElementById('form').innerHTML = newForm
+        function addUser() {
+            let nameEl = document.getElementById('name');
+            let numberEl = document.getElementById('number');
+            let passwordEl = document.getElementById('password');
+            let user = {
+                name: nameEl.value,
+                number: numberEl.value,
+                password: passwordEl.value
+            }
+            users.push(user); // [{name:'', number:'',password:''}]
+
+            nameEl.value = '';
+            numberEl.value = '';
+            passwordEl.value = '';
+            adddata();
+        }
+        const renderTable = () => {
+            document.getElementById("demo").innerHTML = 'Loading... ';
+            let tblhead = ``;
+            for (let i = 0; i < users.length; i++) { // array ka length
+                tblhead = tblhead +
+                    `<tr>
+                   <td> ${i + 1}</td>
+                   <td> ${users[i].name}</td>
+                   <td>${users[i].number}</td>
+                   <td>${users[i].password}</td>
+                   <td><button onclick='EditUser(${i})'>Edit</button></td>
+                   <td><button onclick='DeleteUser(${i})'>Delete</button></td>
+                   </tr>`;
+            }
+            setTimeout(() => {
+                document.getElementById("demo").innerHTML = tblhead;
+            }, 3000)
+        }
+        function adddata() {
+            renderTable()
+        }
+        function DeleteUser(i) {
+            users.splice(i, 1)
+            adddata()
+        }
+        function EditUser(i) {
+            let EditForm = ` <input type="text" value='${users[i].name}' name="Name" id="newName" placeholder="Your Name"><br><br>
+            <input type="number" value='${users[i].number}' name="Mobile Number" id="newNumber" placeholder="Mobile No."><br><br>
+            <input type="password" value='${users[i].password}' name="Password" id="newPassword" placeholder="password"><br><br>
+            <input onclick="UpdateUser(${i})" type="button" value="Update"><br><br>`
+
+            document.getElementById('form').innerHTML = EditForm
+        }
+
+        function UpdateUser(i) {
+            let name = document.getElementById('newName');
+            let number = document.getElementById('newNumber');
+            let password = document.getElementById('newPassword');
+            let user = {
+                name: name.value,
+                number: number.value,
+                password: password.value
+            }
+            users[i] = user
+            document.getElementById('form').innerHTML = newForm
+            adddata()
+
+        }
+
+
+    </script>
+</body>
+
+</html>
